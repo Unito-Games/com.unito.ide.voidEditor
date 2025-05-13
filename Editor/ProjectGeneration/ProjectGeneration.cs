@@ -78,7 +78,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 
 		public ProjectGeneration(string tempDirectory, IAssemblyNameProvider assemblyNameProvider, IFileIO fileIoProvider, IGUIDGenerator guidGenerator)
 		{
-			ProjectDirectory = FileUtility.NormalizeWindowsToUnix(tempDirectory);
+			ProjectDirectory = VoidEditorFileUtility.NormalizeWindowsToUnix(tempDirectory);
 			m_ProjectName = Path.GetFileName(ProjectDirectory);
 			m_AssemblyNameProvider = assemblyNameProvider;
 			m_FileIOProvider = fileIoProvider;
@@ -640,7 +640,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 				var key = argument
 					.Substring(1, index - 1)
 					.Trim();
-				
+
 				if (!names.Contains(key))
 					continue;
 

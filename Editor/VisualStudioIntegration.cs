@@ -1,4 +1,5 @@
 ﻿/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Unity Technologies.
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
@@ -8,13 +9,15 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.Unity.VisualStudio.Editor.Messaging;
-using Microsoft.Unity.VisualStudio.Editor.Testing;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
+using Microsoft.Unity.VisualStudio.Editor.Messaging;
+using Microsoft.Unity.VisualStudio.Editor.Testing;
 using MessageType = Microsoft.Unity.VisualStudio.Editor.Messaging.MessageType;
+using VoidEditorFileUtility = UnityEditor.VoidEditorFileUtility;
 
-namespace Microsoft.Unity.VisualStudio.Editor
+namespace Microsoft.Unity.VoidEditor.Editor
 {
 	[InitializeOnLoad]
 	internal class VisualStudioIntegration
@@ -77,7 +80,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 				foreach (var assembly in assemblies)
 				{
 					// for now we only want to warn against local assemblies, do not check externals.
-					var relativePath = FileUtility.MakeRelativeToProjectPath(assembly.Location);
+					var relativePath = VoidEditorFileUtility.MakeRelativeToProjectPath(assembly.Location);
 					if (relativePath == null)
 						continue;
 

@@ -16,7 +16,7 @@ using Unity.CodeEditor;
 [assembly: InternalsVisibleTo("Unity.VisualStudio.Standalone.EditorTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
-namespace Microsoft.Unity.VisualStudio.Editor
+namespace Microsoft.Unity.VoidEditor.Editor
 {
 	[InitializeOnLoad]
 	public class VisualStudioEditor : IExternalCodeEditor
@@ -83,7 +83,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 		// keeping it for now given it is public, so we need a major bump to remove it 
 		public void CreateIfDoesntExist()
 		{
-			if (!TryGetVisualStudioInstallationForPath(CodeEditor.CurrentEditorInstallation, true, out var installation)) 
+			if (!TryGetVisualStudioInstallationForPath(CodeEditor.CurrentEditorInstallation, true, out var installation))
 				return;
 
 			var generator = installation.ProjectGenerator;
@@ -175,7 +175,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 
 			foreach (var file in importedFiles.Where(a => Path.GetExtension(a) == ".pdb"))
 			{
-				var pdbFile = FileUtility.GetAssetFullPath(file);
+				var pdbFile = VoidEditorFileUtility.GetAssetFullPath(file);
 
 				// skip Unity packages like com.unity.ext.nunit
 				if (pdbFile.IndexOf($"{Path.DirectorySeparatorChar}com.unity.", StringComparison.OrdinalIgnoreCase) > 0)
@@ -216,7 +216,8 @@ namespace Microsoft.Unity.VisualStudio.Editor
 		{
 			var editorPath = CodeEditor.CurrentEditorInstallation;
 
-			if (!Discovery.TryDiscoverInstallation(editorPath, out var installation)) {
+			if (!Discovery.TryDiscoverInstallation(editorPath, out var installation))
+			{
 				Debug.LogWarning($"Visual Studio executable {editorPath} is not found. Please change your settings in Edit > Preferences > External Tools.");
 				return false;
 			}
@@ -274,7 +275,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 			var relativePath = path
 				.NormalizeWindowsToUnix()
 				.Replace(basePath, string.Empty)
-				.Trim(FileUtility.UnixSeparator);
+				.Trim(VoidEditorFileUtility.UnixSeparator);
 
 			var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(relativePath);
 			if (packageInfo == null)

@@ -11,7 +11,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace Microsoft.Unity.VisualStudio.Editor
+namespace Microsoft.Unity.VoidEditor.Editor
 {
 	[Serializable]
 	internal class FileUsage
@@ -37,11 +37,11 @@ namespace Microsoft.Unity.VisualStudio.Editor
 
 		internal static void ShowUsage(string path, string[] gameObjectPath)
 		{
-			path = FileUtility.MakeRelativeToProjectPath(path);
+			path = VoidEditorFileUtility.MakeRelativeToProjectPath(path);
 			if (path == null)
 				return;
 
-			path = FileUtility.NormalizeWindowsToUnix(path);
+			path = VoidEditorFileUtility.NormalizeWindowsToUnix(path);
 			var extension = Path.GetExtension(path).ToLower();
 
 			EditorUtility.FocusProjectWindow();
