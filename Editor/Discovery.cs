@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using Unity.VoidEditor.Editor; // Namespace for VoidEditorInstallation
 
 namespace Microsoft.Unity.VisualStudio.Editor
 {
@@ -13,14 +14,20 @@ namespace Microsoft.Unity.VisualStudio.Editor
 	{
 		public static IEnumerable<IVisualStudioInstallation> GetVisualStudioInstallations()
 		{
+			// Keep existing discoveries if they are still relevant
 			foreach (var installation in VisualStudioCursorInstallation.GetVisualStudioInstallations())
 				yield return installation;
 			foreach (var installation in VisualStudioCodiumInstallation.GetVisualStudioInstallations())
 				yield return installation;
+			
+			// Add Void Editor discovery
+			foreach (var installation in VoidEditorInstallation.GetInstallations())
+				yield return installation; // Now compatible as VoidEditorInstallation implements IVisualStudioInstallation
 		}
 
 		public static bool TryDiscoverInstallation(string editorPath, out IVisualStudioInstallation installation)
 		{
+			// Try existing ones first
 			try
 			{
 				if (VisualStudioCursorInstallation.TryDiscoverInstallation(editorPath, out installation))
@@ -30,9 +37,20 @@ namespace Microsoft.Unity.VisualStudio.Editor
 			}
 			catch (IOException)
 			{
+				// If one discovery fails, still try others.
 				installation = null;
 			}
 
+			// Try Void Editor
+			// The out parameter of VoidEditorInstallation.TryDiscoverInstallation is VoidEditorInstallation.
+			// It can be directly assigned to IVisualStudioInstallation if the class implements the interface.
+			if (VoidEditorInstallation.TryDiscoverInstallation(editorPath, out VoidEditorInstallation voidInstallation))
+			{
+				installation = voidInstallation;
+				return true;
+			}
+			
+			installation = null; // Ensure installation is null if nothing is found
 			return false;
 		}
 
@@ -40,6 +58,7 @@ namespace Microsoft.Unity.VisualStudio.Editor
 		{
             VisualStudioCursorInstallation.Initialize();
             VisualStudioCodiumInstallation.Initialize();
+            VoidEditorInstallation.Initialize(); // Initialize Void Editor discovery
 		}
 	}
 }
