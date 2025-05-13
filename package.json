@@ -1,5 +1,5 @@
 {
-  "name": "com.unito.ide.voidEditor",
+  "name": "com.unity.ide.voideditor",
   "displayName": "Void Editor",
   "description": "Void editor integration for supporting Cursor as code editor for unity. Adds support for generating csproj files for intellisense purposes, auto discovery of installations, etc.",
   "version": "2.0.24",
